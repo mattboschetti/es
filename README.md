@@ -1,11 +1,11 @@
 # es
-Event sourcing sample based on m-r repo
+
+Event sourcing sample ported from [gregoryyoung/m-r](https://github.com/gregoryyoung/m-r) repository.
 
 ## Requirements
 
 ```
 Java 16
-Maven
 PostgreSQL
 ```
 
