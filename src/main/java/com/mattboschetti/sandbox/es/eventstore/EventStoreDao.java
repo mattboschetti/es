@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mattboschetti.sandbox.es.event.Event;
 import com.mattboschetti.sandbox.es.outbox.EventPersisted;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -25,6 +27,7 @@ import java.util.stream.Stream;
 @Component
 public class EventStoreDao implements EventStore {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EventStoreDao.class);
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final ObjectMapper objectMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -60,7 +63,10 @@ public class EventStoreDao implements EventStore {
         try {
             namedParameterJdbcTemplate.batchUpdate("insert into sourced_events (id, stream, type, event, version, created_at) values (:id, :stream, :type, :event::json, :version, :created_at)", parameters);
         } catch (DataAccessException e) {
-            throw new ConcurrencyException();
+            if (e.getCause().getMessage().contains("sourced_events_stream_version_uindex")) {
+                throw new ConcurrencyException();
+            }
+            throw new RuntimeException("Something went wrong persisting events");
         }
 
         Stream.of(parameters)

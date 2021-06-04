@@ -42,7 +42,7 @@ public class InventoryItemDetailView {
 
     public void handle(InventoryItemCreated message) {
         repository.save(new InventoryItemDetail(message.id, message.name, 0, message.version));
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemRenamed message) {
@@ -51,7 +51,7 @@ public class InventoryItemDetailView {
             i.version = message.version;
             repository.save(i);
         });
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(ItemsRemovedFromInventory message) {
@@ -60,7 +60,7 @@ public class InventoryItemDetailView {
             item.version = message.version;
             repository.save(item);
         });
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(ItemsCheckedInToInventory message) {
@@ -69,11 +69,11 @@ public class InventoryItemDetailView {
             item.version = message.version;
             repository.save(item);
         });
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemDeactivated message) {
         repository.deleteById(message.id);
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 }

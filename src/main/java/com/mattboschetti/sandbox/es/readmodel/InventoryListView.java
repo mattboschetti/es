@@ -34,7 +34,7 @@ public class InventoryListView {
 
     public void handle(InventoryItemCreated message) {
         repository.save(new InventoryItemList(message.id, message.name, message.version));
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemRenamed message) {
@@ -43,11 +43,11 @@ public class InventoryListView {
             item.version = message.version;
             repository.save(item);
         });
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemDeactivated message) {
         repository.deleteById(message.id);
-        LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 }
