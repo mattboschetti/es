@@ -7,6 +7,9 @@ import java.util.UUID;
 
 public interface EventStore {
     void saveEvents(UUID aggregateId, List<Event> events, int expectedVersion);
+
+    List<Event> getEventsById(List<UUID> ids);
+
     List<Event> getEventsForAggregate(UUID aggregateId);
 
     public static class AggregateNotFoundException extends RuntimeException {}

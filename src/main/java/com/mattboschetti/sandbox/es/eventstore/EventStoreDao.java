@@ -3,10 +3,13 @@ package com.mattboschetti.sandbox.es.eventstore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mattboschetti.sandbox.es.event.Event;
+import com.mattboschetti.sandbox.es.outbox.EventPersisted;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -16,16 +19,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class EventStoreDao implements EventStore {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final ObjectMapper objectMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public EventStoreDao(DataSource dataSource, ObjectMapper objectMapper) {
+    public EventStoreDao(DataSource dataSource, ObjectMapper objectMapper, ApplicationEventPublisher applicationEventPublisher) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.objectMapper = objectMapper;
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
+
+    @Override
+    public List<Event> getEventsById(List<UUID> ids) {
+        return namedParameterJdbcTemplate.query("select * from sourced_events where id in (:ids)", Map.of("ids", ids), this::rowMapper);
     }
 
     @Override
@@ -34,6 +46,7 @@ public class EventStoreDao implements EventStore {
     }
 
     @Override
+    @Transactional
     public void saveEvents(UUID aggregateId, List<Event> events, int expectedVersion) {
         var parameters = events.stream()
                 .map(e -> parameterMapper(e, aggregateId))
@@ -45,8 +58,10 @@ public class EventStoreDao implements EventStore {
             throw new ConcurrencyException();
         }
 
-        // publish current event to the bus for further processing by subscribers
-        //_publisher.Publish(event);
+        Stream.of(parameters)
+                .map(p -> (UUID) p.getValue("id"))
+                .map(EventPersisted::new)
+                .forEach(applicationEventPublisher::publishEvent);
     }
 
     private MapSqlParameterSource parameterMapper(Event e, UUID aggregateId) {

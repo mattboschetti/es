@@ -28,27 +28,27 @@ public class InventoryController {
 
     @PostMapping
     public void newInventoryItem(@RequestParam("name") String name) {
-        commandHandler.Handle(new CreateInventoryItem(UUID.randomUUID(), name));
+        commandHandler.handle(new CreateInventoryItem(UUID.randomUUID(), name));
     }
 
     @DeleteMapping("/{uuid}")
     public void deactivateInventoryItem(@PathVariable("uuid") UUID uuid, @RequestParam("version") int version) {
-        commandHandler.Handle(new DeactivateInventoryItem(uuid, version));
+        commandHandler.handle(new DeactivateInventoryItem(uuid, version));
     }
 
     @PostMapping("/{uuid}/remove")
     public void removeItemsFromInventory(@PathVariable("uuid") UUID uuid, @RequestParam("count") int count, @RequestParam("version") int version) {
-        commandHandler.Handle(new RemoveItemsFromInventory(uuid, count, version));
+        commandHandler.handle(new RemoveItemsFromInventory(uuid, count, version));
     }
 
     @PostMapping("/{uuid}/checkin")
     public void checkinItemsToInventory(@PathVariable("uuid") UUID uuid, @RequestParam("count") int count, @RequestParam("version") int version) {
-        commandHandler.Handle(new CheckInItemsToInventory(uuid, count, version));
+        commandHandler.handle(new CheckInItemsToInventory(uuid, count, version));
     }
 
     @PutMapping("/{uuid}")
     public void renameItem(@PathVariable("uuid") UUID uuid, @RequestParam("name") String name, @RequestParam("version") int version) {
-        commandHandler.Handle(new RenameInventoryItem(uuid, name, version));
+        commandHandler.handle(new RenameInventoryItem(uuid, name, version));
     }
 
 }

@@ -37,6 +37,11 @@ public class InMemoryEventStore implements EventStore {
         }
     }
 
+    @Override
+    public List<Event> getEventsById(List<UUID> ids) {
+        return null;
+    }
+
     // collect all processed events for given aggregate and return them as a list
     // used to build up an aggregate from its history (Domain.LoadsFromHistory)
     public List<Event> getEventsForAggregate(UUID aggregateId)
