@@ -1,7 +1,14 @@
 package com.mattboschetti.sandbox.es.api;
 
 import com.mattboschetti.sandbox.es.CommandHandler;
+import com.mattboschetti.sandbox.es.readmodel.InventoryItemDetail;
+import com.mattboschetti.sandbox.es.readmodel.InventoryItemDetailRepository;
+import com.mattboschetti.sandbox.es.readmodel.InventoryItemList;
+import com.mattboschetti.sandbox.es.readmodel.InventoryItemListRepository;
+import com.mattboschetti.sandbox.es.readmodel.ReadModelService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,9 +28,15 @@ import java.util.UUID;
 public class InventoryController {
 
     private final CommandHandler commandHandler;
+    private final InventoryItemListRepository itemListRepository;
+    private final InventoryItemDetailRepository itemDetailRepository;
+    private final ReadModelService readModelService;
 
-    public InventoryController(CommandHandler commandHandler) {
+    public InventoryController(CommandHandler commandHandler, InventoryItemListRepository itemListRepository, InventoryItemDetailRepository itemDetailRepository, ReadModelService readModelService) {
         this.commandHandler = commandHandler;
+        this.itemListRepository = itemListRepository;
+        this.itemDetailRepository = itemDetailRepository;
+        this.readModelService = readModelService;
     }
 
     @PostMapping
@@ -51,4 +64,23 @@ public class InventoryController {
         commandHandler.handle(new RenameInventoryItem(uuid, name, version));
     }
 
+    @GetMapping
+    public Iterable<InventoryItemList> getItems() {
+        return itemListRepository.findAll();
+    }
+
+    @GetMapping("/{uuid}")
+    public ResponseEntity<InventoryItemDetail> getItem(@PathVariable("uuid") UUID uuid) {
+        return itemDetailRepository.findById(uuid).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/rebuild")
+    public void rebuildAll() {
+        readModelService.rebuildAll();
+    }
+
+    @PostMapping("/rebuild/{uuid}")
+    public void rebuildAll(@RequestParam("uuid") UUID uuid) {
+        readModelService.rebuildAggregate(uuid);
+    }
 }

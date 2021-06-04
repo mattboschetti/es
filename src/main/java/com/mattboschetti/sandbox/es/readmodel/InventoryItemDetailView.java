@@ -48,6 +48,7 @@ public class InventoryItemDetailView {
     public void handle(InventoryItemRenamed message) {
         repository.findById(message.id).ifPresent(i -> {
             i.name = message.newName;
+            i.version = message.version;
             repository.save(i);
         });
         LOG.info("Handled {} id {}", message.getClass().getSimpleName(), message.id);

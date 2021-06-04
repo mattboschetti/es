@@ -36,6 +36,11 @@ public class EventStoreDao implements EventStore {
     }
 
     @Override
+    public List<Event> getAll() {
+        return namedParameterJdbcTemplate.query("select * from sourced_events", this::rowMapper);
+    }
+
+    @Override
     public List<Event> getEventsById(List<UUID> ids) {
         return namedParameterJdbcTemplate.query("select * from sourced_events where id in (:ids)", Map.of("ids", ids), this::rowMapper);
     }

@@ -54,4 +54,9 @@ public class InMemoryEventStore implements EventStore {
         List<EventDescriptor> eventDescriptors = current.get(aggregateId);
         return eventDescriptors.stream().map(desc -> desc.EventData).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Event> getAll() {
+        return List.of();
+    }
 }

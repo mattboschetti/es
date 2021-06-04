@@ -4,5 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.UUID;
 
-interface InventoryItemDetailRepository extends CrudRepository<InventoryItemDetail, UUID> {
+public interface InventoryItemDetailRepository extends CrudRepository<InventoryItemDetail, UUID> {
 }
