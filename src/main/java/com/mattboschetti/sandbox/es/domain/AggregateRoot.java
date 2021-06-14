@@ -1,6 +1,6 @@
 package com.mattboschetti.sandbox.es.domain;
 
-import com.mattboschetti.sandbox.es.event.Event;
+import com.mattboschetti.sandbox.es.eventstore.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +50,5 @@ public abstract class AggregateRoot {
         }
     }
 
-    abstract void apply(Event event);
+    protected abstract void apply(Event event);
 }

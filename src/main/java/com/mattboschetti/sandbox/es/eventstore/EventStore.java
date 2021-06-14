@@ -1,7 +1,5 @@
 package com.mattboschetti.sandbox.es.eventstore;
 
-import com.mattboschetti.sandbox.es.event.Event;
-
 import java.util.List;
 import java.util.UUID;
 

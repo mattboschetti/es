@@ -2,8 +2,6 @@ package com.mattboschetti.sandbox.es.eventstore;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mattboschetti.sandbox.es.event.Event;
-import com.mattboschetti.sandbox.es.outbox.EventPersisted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
@@ -40,17 +37,17 @@ public class EventStoreDao implements EventStore {
 
     @Override
     public List<Event> getAll() {
-        return namedParameterJdbcTemplate.query("select * from sourced_events", this::rowMapper);
+        return namedParameterJdbcTemplate.query("select * from event_store", this::rowMapper);
     }
 
     @Override
     public List<Event> getEventsById(List<UUID> ids) {
-        return namedParameterJdbcTemplate.query("select * from sourced_events where id in (:ids)", Map.of("ids", ids), this::rowMapper);
+        return namedParameterJdbcTemplate.query("select * from event_store where id in (:ids)", Map.of("ids", ids), this::rowMapper);
     }
 
     @Override
     public List<Event> getEventsForAggregate(UUID aggregateId) {
-        return namedParameterJdbcTemplate.query("select * from sourced_events where stream like :stream", Map.of("stream", aggregateId.toString()), this::rowMapper);
+        return namedParameterJdbcTemplate.query("select * from event_store where stream like :stream", Map.of("stream", aggregateId.toString()), this::rowMapper);
     }
 
     @Override
@@ -61,9 +58,9 @@ public class EventStoreDao implements EventStore {
                 .toArray(MapSqlParameterSource[]::new);
 
         try {
-            namedParameterJdbcTemplate.batchUpdate("insert into sourced_events (id, stream, type, event, version, created_at) values (:id, :stream, :type, :event::json, :version, :created_at)", parameters);
+            namedParameterJdbcTemplate.batchUpdate("insert into event_store (id, stream, type, event, version, created_at) values (:id, :stream, :type, :event::json, :version, :created_at)", parameters);
         } catch (DataAccessException e) {
-            if (e.getCause().getMessage().contains("sourced_events_stream_version_uindex")) {
+            if (e.getCause().getMessage().contains("event_store_stream_version_uindex")) {
                 throw new ConcurrencyException();
             }
             throw new RuntimeException("Something went wrong persisting events");
