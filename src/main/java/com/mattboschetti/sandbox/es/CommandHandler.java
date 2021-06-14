@@ -5,8 +5,8 @@ import com.mattboschetti.sandbox.es.command.CreateInventoryItem;
 import com.mattboschetti.sandbox.es.command.DeactivateInventoryItem;
 import com.mattboschetti.sandbox.es.command.RemoveItemsFromInventory;
 import com.mattboschetti.sandbox.es.command.RenameInventoryItem;
+import com.mattboschetti.sandbox.es.command.RepriceInventoryItem;
 import com.mattboschetti.sandbox.es.domain.InventoryItem;
-import com.mattboschetti.sandbox.es.domain.InventoryItemRepository;
 import com.mattboschetti.sandbox.es.domain.Repository;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class CommandHandler {
     }
 
     public void handle(CreateInventoryItem message) {
-        var item = new InventoryItem(message.inventoryItemId, message.name);
+        var item = new InventoryItem(message.inventoryItemId, message.name, message.unitPrice);
         repository.save(item, -1);
     }
 
@@ -48,4 +48,9 @@ public class CommandHandler {
         repository.save(item, message.originalVersion);
     }
 
+    public void handle(RepriceInventoryItem message) {
+        var item = repository.getById(message.inventoryItemId);
+        item.reprice(message.unitPrice);
+        repository.save(item, message.originalVersion);
+    }
 }

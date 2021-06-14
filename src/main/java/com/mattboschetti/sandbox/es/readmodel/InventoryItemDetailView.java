@@ -4,6 +4,7 @@ import com.mattboschetti.sandbox.es.event.Event;
 import com.mattboschetti.sandbox.es.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.event.InventoryItemDeactivated;
 import com.mattboschetti.sandbox.es.event.InventoryItemRenamed;
+import com.mattboschetti.sandbox.es.event.InventoryItemUnitPriceChanged;
 import com.mattboschetti.sandbox.es.event.ItemsCheckedInToInventory;
 import com.mattboschetti.sandbox.es.event.ItemsRemovedFromInventory;
 import org.slf4j.Logger;
@@ -38,10 +39,22 @@ public class InventoryItemDetailView {
         if (event instanceof InventoryItemDeactivated e) {
             handle(e);
         }
+        if (event instanceof InventoryItemUnitPriceChanged e) {
+            handle(e);
+        }
+    }
+
+    public void handle(InventoryItemUnitPriceChanged message) {
+        repository.findById(message.id).ifPresent(i -> {
+            i.unitPrice = message.unitPrice.toString();
+            i.version = message.version;
+            repository.save(i);
+        });
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemCreated message) {
-        repository.save(new InventoryItemDetail(message.id, message.name, 0, message.version));
+        repository.save(new InventoryItemDetail(message.id, message.name, 0, message.unitPrice.toString(), message.version));
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 

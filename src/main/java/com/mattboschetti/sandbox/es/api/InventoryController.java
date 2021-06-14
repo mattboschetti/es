@@ -1,6 +1,12 @@
 package com.mattboschetti.sandbox.es.api;
 
 import com.mattboschetti.sandbox.es.CommandHandler;
+import com.mattboschetti.sandbox.es.command.CheckInItemsToInventory;
+import com.mattboschetti.sandbox.es.command.CreateInventoryItem;
+import com.mattboschetti.sandbox.es.command.DeactivateInventoryItem;
+import com.mattboschetti.sandbox.es.command.RemoveItemsFromInventory;
+import com.mattboschetti.sandbox.es.command.RenameInventoryItem;
+import com.mattboschetti.sandbox.es.command.RepriceInventoryItem;
 import com.mattboschetti.sandbox.es.readmodel.InventoryItemDetail;
 import com.mattboschetti.sandbox.es.readmodel.InventoryItemDetailRepository;
 import com.mattboschetti.sandbox.es.readmodel.InventoryItemList;
@@ -16,12 +22,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.mattboschetti.sandbox.es.command.CheckInItemsToInventory;
-import com.mattboschetti.sandbox.es.command.CreateInventoryItem;
-import com.mattboschetti.sandbox.es.command.DeactivateInventoryItem;
-import com.mattboschetti.sandbox.es.command.RemoveItemsFromInventory;
-import com.mattboschetti.sandbox.es.command.RenameInventoryItem;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
@@ -42,8 +44,8 @@ public class InventoryController {
 
     @Operation(summary = "Add a new item to the inventory")
     @PostMapping
-    public void newInventoryItem(@RequestParam("name") String name) {
-        commandHandler.handle(new CreateInventoryItem(UUID.randomUUID(), name));
+    public void newInventoryItem(@RequestParam("name") String name, @RequestParam String unitPrice) {
+        commandHandler.handle(new CreateInventoryItem(UUID.randomUUID(), name, new BigDecimal(unitPrice)));
     }
 
     @Operation(summary = "Remove item from inventory")
@@ -65,9 +67,15 @@ public class InventoryController {
     }
 
     @Operation(summary = "Rename an item")
-    @PutMapping("/{uuid}")
+    @PutMapping("/{uuid}/name")
     public void renameItem(@PathVariable("uuid") UUID uuid, @RequestParam("name") String name, @RequestParam("version") int version) {
         commandHandler.handle(new RenameInventoryItem(uuid, name, version));
+    }
+
+    @Operation(summary = "Reprice an item")
+    @PutMapping("/{uuid}/price")
+    public void repriceItem(@PathVariable("uuid") UUID uuid, @RequestParam("price") String price, @RequestParam("version") int version) {
+        commandHandler.handle(new RepriceInventoryItem(uuid, new BigDecimal(price), version));
     }
 
     @Operation(summary = "Get all inventory items")

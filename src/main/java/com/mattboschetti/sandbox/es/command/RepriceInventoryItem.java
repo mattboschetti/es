@@ -3,14 +3,14 @@ package com.mattboschetti.sandbox.es.command;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class CreateInventoryItem extends Command {
+public class RepriceInventoryItem extends Command {
     public final UUID inventoryItemId;
-    public final String name;
     public final BigDecimal unitPrice;
+    public final int originalVersion;
 
-    public CreateInventoryItem(UUID inventoryItemId, String name, BigDecimal unitPrice) {
+    public RepriceInventoryItem(UUID inventoryItemId, BigDecimal unitPrice, int originalVersion) {
         this.inventoryItemId = inventoryItemId;
-        this.name = name;
         this.unitPrice = unitPrice;
+        this.originalVersion = originalVersion;
     }
 }

@@ -5,8 +5,8 @@ import { SharedArray } from "k6/data";
 import { randomItem, randomIntBetween } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 
 export let options = {
-    vus: 30,
-    duration: '30s',
+    vus: 100,
+    duration: '60s',
 };
 
 // not using SharedArray here will mean that the code in the function call (that is what loads and

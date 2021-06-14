@@ -1,7 +1,6 @@
 package com.mattboschetti.sandbox.es.readmodel;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
 import org.springframework.data.domain.Persistable;
 
 import java.util.UUID;
@@ -11,12 +10,14 @@ public class InventoryItemDetail implements Persistable<UUID> {
     public UUID id;
     public String name;
     public int currentCount;
+    public String unitPrice;
     public int version;
 
-    public InventoryItemDetail(UUID id, String name, int currentCount, int version) {
+    public InventoryItemDetail(UUID id, String name, int currentCount, String unitPrice, int version) {
         this.id = id;
         this.name = name;
         this.currentCount = currentCount;
+        this.unitPrice = unitPrice;
         this.version = version;
     }
 

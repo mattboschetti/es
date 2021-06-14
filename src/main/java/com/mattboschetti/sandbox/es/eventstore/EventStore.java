@@ -14,7 +14,7 @@ public interface EventStore {
 
     List<Event> getAll();
 
-    public static class AggregateNotFoundException extends RuntimeException {}
+    class AggregateNotFoundException extends RuntimeException {}
 
-    public static class ConcurrencyException extends RuntimeException {}
+    class ConcurrencyException extends RuntimeException {}
 }

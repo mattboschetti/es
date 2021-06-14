@@ -5,9 +5,11 @@ import com.mattboschetti.sandbox.es.event.Event;
 import com.mattboschetti.sandbox.es.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.event.InventoryItemDeactivated;
 import com.mattboschetti.sandbox.es.event.InventoryItemRenamed;
+import com.mattboschetti.sandbox.es.event.InventoryItemUnitPriceChanged;
 import com.mattboschetti.sandbox.es.event.ItemsCheckedInToInventory;
 import com.mattboschetti.sandbox.es.event.ItemsRemovedFromInventory;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class InventoryItem extends AggregateRoot {
@@ -52,6 +54,13 @@ public class InventoryItem extends AggregateRoot {
         applyChange(new InventoryItemDeactivated(id));
     }
 
+    public void reprice(BigDecimal unitPrice) {
+        if (unitPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalStateException("item can't have a negative price");
+        }
+        applyChange(new InventoryItemUnitPriceChanged(id, unitPrice));
+    }
+
     @Override
     public UUID getId() {
         return id;
@@ -61,8 +70,8 @@ public class InventoryItem extends AggregateRoot {
         // used to create in repository ... many ways to avoid this, eg making private constructor
     }
 
-    public InventoryItem(UUID id, String name) {
-        applyChange(new InventoryItemCreated(id, name));
+    public InventoryItem(UUID id, String name, BigDecimal unitPrice) {
+        applyChange(new InventoryItemCreated(id, name, unitPrice));
     }
 
     @Override
