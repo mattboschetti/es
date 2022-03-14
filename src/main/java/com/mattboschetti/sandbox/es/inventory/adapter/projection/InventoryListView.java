@@ -1,6 +1,7 @@
-package com.mattboschetti.sandbox.es.inventory.read;
+package com.mattboschetti.sandbox.es.inventory.adapter.projection;
 
 import com.mattboschetti.sandbox.es.eventstore.Event;
+import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemList;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemDeactivated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemRenamed;

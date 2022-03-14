@@ -1,8 +1,9 @@
-package com.mattboschetti.sandbox.es.inventory;
+package com.mattboschetti.sandbox.es.inventory.domain;
 
 import com.mattboschetti.sandbox.es.domain.AggregateRoot;
 import com.mattboschetti.sandbox.es.domain.Repository;
 import com.mattboschetti.sandbox.es.eventstore.EventStore;
+import com.mattboschetti.sandbox.es.inventory.domain.InventoryItem;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

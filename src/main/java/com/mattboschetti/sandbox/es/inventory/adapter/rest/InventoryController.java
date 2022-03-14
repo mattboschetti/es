@@ -1,16 +1,17 @@
-package com.mattboschetti.sandbox.es.inventory;
+package com.mattboschetti.sandbox.es.inventory.adapter.rest;
 
-import com.mattboschetti.sandbox.es.inventory.command.CheckInItemsToInventory;
-import com.mattboschetti.sandbox.es.inventory.command.CreateInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.command.DeactivateInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.command.RemoveItemsFromInventory;
-import com.mattboschetti.sandbox.es.inventory.command.RenameInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.command.RepriceInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.read.InventoryItemDetail;
-import com.mattboschetti.sandbox.es.inventory.read.InventoryItemDetailRepository;
-import com.mattboschetti.sandbox.es.inventory.read.InventoryItemList;
-import com.mattboschetti.sandbox.es.inventory.read.InventoryItemListRepository;
-import com.mattboschetti.sandbox.es.inventory.read.ReadModelService;
+import com.mattboschetti.sandbox.es.inventory.application.InventoryApplicationService;
+import com.mattboschetti.sandbox.es.inventory.application.command.CheckInItemsToInventory;
+import com.mattboschetti.sandbox.es.inventory.application.command.CreateInventoryItem;
+import com.mattboschetti.sandbox.es.inventory.application.command.DeactivateInventoryItem;
+import com.mattboschetti.sandbox.es.inventory.application.command.RemoveItemsFromInventory;
+import com.mattboschetti.sandbox.es.inventory.application.command.RenameInventoryItem;
+import com.mattboschetti.sandbox.es.inventory.application.command.RepriceInventoryItem;
+import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemDetail;
+import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemDetailRepository;
+import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemList;
+import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemListRepository;
+import com.mattboschetti.sandbox.es.inventory.application.InventoryQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,12 +30,12 @@ import java.util.UUID;
 @RequestMapping("/inventory/item")
 public class InventoryController {
 
-    private final InventoryCommandHandler inventoryCommandHandler;
+    private final InventoryApplicationService inventoryCommandHandler;
     private final InventoryItemListRepository itemListRepository;
     private final InventoryItemDetailRepository itemDetailRepository;
-    private final ReadModelService readModelService;
+    private final InventoryQueryService readModelService;
 
-    public InventoryController(InventoryCommandHandler inventoryCommandHandler, InventoryItemListRepository itemListRepository, InventoryItemDetailRepository itemDetailRepository, ReadModelService readModelService) {
+    public InventoryController(InventoryApplicationService inventoryCommandHandler, InventoryItemListRepository itemListRepository, InventoryItemDetailRepository itemDetailRepository, InventoryQueryService readModelService) {
         this.inventoryCommandHandler = inventoryCommandHandler;
         this.itemListRepository = itemListRepository;
         this.itemDetailRepository = itemDetailRepository;

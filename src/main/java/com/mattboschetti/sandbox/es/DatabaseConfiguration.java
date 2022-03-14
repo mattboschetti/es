@@ -14,12 +14,11 @@ import javax.sql.DataSource;
 @Configuration
 @EnableJdbcRepositories
 public class DatabaseConfiguration extends AbstractJdbcConfiguration {
+
     @Bean
     NamedParameterJdbcOperations namedParameterJdbcOperations(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
     }
-
-
 
     @Bean
     TransactionManager transactionManager(DataSource dataSource) {

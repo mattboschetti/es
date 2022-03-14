@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.inventory;
+package com.mattboschetti.sandbox.es.inventory.domain;
 
 import com.google.common.base.Strings;
 import com.mattboschetti.sandbox.es.domain.AggregateRoot;

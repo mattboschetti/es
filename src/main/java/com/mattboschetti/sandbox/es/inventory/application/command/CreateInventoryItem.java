@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.inventory.command;
+package com.mattboschetti.sandbox.es.inventory.application.command;
 
 import com.mattboschetti.sandbox.es.domain.Command;
 
