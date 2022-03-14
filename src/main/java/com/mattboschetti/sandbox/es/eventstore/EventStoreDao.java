@@ -52,7 +52,7 @@ public class EventStoreDao implements EventStore {
 
     @Override
     @Transactional
-    public void saveEvents(UUID aggregateId, List<Event> events, int expectedVersion) {
+    public void saveEvents(UUID aggregateId, List<Event> events) {
         var parameters = events.stream()
                 .map(e -> parameterMapper(e, aggregateId))
                 .toArray(MapSqlParameterSource[]::new);
