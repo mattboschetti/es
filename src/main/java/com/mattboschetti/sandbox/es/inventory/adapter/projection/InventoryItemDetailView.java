@@ -1,6 +1,8 @@
 package com.mattboschetti.sandbox.es.inventory.adapter.projection;
 
+import com.mattboschetti.sandbox.es.eventstore.DispatchableDomainEvent;
 import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
+import com.mattboschetti.sandbox.es.eventstore.EventStreamId;
 import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemDetail;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemDeactivated;
@@ -24,70 +26,70 @@ public class InventoryItemDetailView {
     }
 
     @EventListener
-    public void handle(DomainEvent event) {
-        if (event instanceof InventoryItemCreated e) {
-            handle(e);
+    public void handle(DispatchableDomainEvent event) {
+        if (event.event() instanceof InventoryItemCreated e) {
+            handle(event.eventStreamId(), e);
         }
-        if (event instanceof InventoryItemRenamed e) {
-            handle(e);
+        if (event.event() instanceof InventoryItemRenamed e) {
+            handle(event.eventStreamId(), e);
         }
-        if (event instanceof ItemsRemovedFromInventory e) {
-            handle(e);
+        if (event.event() instanceof ItemsRemovedFromInventory e) {
+            handle(event.eventStreamId(), e);
         }
-        if (event instanceof ItemsCheckedInToInventory e) {
-            handle(e);
+        if (event.event() instanceof ItemsCheckedInToInventory e) {
+            handle(event.eventStreamId(), e);
         }
-        if (event instanceof InventoryItemDeactivated e) {
-            handle(e);
+        if (event.event() instanceof InventoryItemDeactivated e) {
+            handle(event.eventStreamId(), e);
         }
-        if (event instanceof InventoryItemUnitPriceChanged e) {
-            handle(e);
+        if (event.event() instanceof InventoryItemUnitPriceChanged e) {
+            handle(event.eventStreamId(), e);
         }
     }
 
-    public void handle(InventoryItemUnitPriceChanged message) {
-        repository.findById(message.id).ifPresent(i -> {
+    public void handle(EventStreamId eventStreamId, InventoryItemUnitPriceChanged message) {
+        repository.findById(eventStreamId.id()).ifPresent(i -> {
             i.unitPrice = message.unitPrice.toString();
-            i.version = message.version();
+            i.version = eventStreamId.version();
             repository.save(i);
         });
-        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), eventStreamId);
     }
 
-    public void handle(InventoryItemCreated message) {
-        repository.save(new InventoryItemDetail(message.id, message.name, 0, message.unitPrice.toString(), message.version()));
-        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+    public void handle(EventStreamId eventStreamId, InventoryItemCreated message) {
+        repository.save(new InventoryItemDetail(eventStreamId.id(), message.name, 0, message.unitPrice.toString(), eventStreamId.version()));
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), eventStreamId);
     }
 
-    public void handle(InventoryItemRenamed message) {
-        repository.findById(message.id).ifPresent(i -> {
+    public void handle(EventStreamId eventStreamId, InventoryItemRenamed message) {
+        repository.findById(eventStreamId.id()).ifPresent(i -> {
             i.name = message.newName;
-            i.version = message.version();
+            i.version = eventStreamId.version();
             repository.save(i);
         });
-        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), eventStreamId);
     }
 
-    public void handle(ItemsRemovedFromInventory message) {
-        repository.findById(message.id).ifPresent(item -> {
+    public void handle(EventStreamId eventStreamId, ItemsRemovedFromInventory message) {
+        repository.findById(eventStreamId.id()).ifPresent(item -> {
             item.currentCount -= message.count;
-            item.version = message.version();
+            item.version = eventStreamId.version();
             repository.save(item);
         });
-        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), eventStreamId);
     }
 
-    public void handle(ItemsCheckedInToInventory message) {
-        repository.findById(message.id).ifPresent(item -> {
+    public void handle(EventStreamId eventStreamId, ItemsCheckedInToInventory message) {
+        repository.findById(eventStreamId.id()).ifPresent(item -> {
             item.currentCount += message.count;
-            item.version = message.version();
+            item.version = eventStreamId.version();
             repository.save(item);
         });
-        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), eventStreamId);
     }
 
-    public void handle(InventoryItemDeactivated message) {
-        repository.deleteById(message.id);
-        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
+    public void handle(EventStreamId eventStreamId, InventoryItemDeactivated message) {
+        repository.deleteById(eventStreamId.id());
+        LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), eventStreamId);
     }
 }

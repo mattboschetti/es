@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record SourcedEvent(UUID uuid,
-                           StreamId stream,
+                           EventStreamId stream,
                            String type,
                            DomainEvent event,
                            int version,

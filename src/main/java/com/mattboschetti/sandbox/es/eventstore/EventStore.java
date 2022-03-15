@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EventStore {
-    void saveEvents(UUID aggregateId, List<DomainEvent> events);
+    void saveEvents(EventStreamId eventStreamId, List<DomainEvent> events);
 
     EventStream getEventsById(List<UUID> ids);
 

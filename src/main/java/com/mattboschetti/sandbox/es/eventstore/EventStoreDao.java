@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Component
@@ -52,9 +53,10 @@ public class EventStoreDao implements EventStore {
 
     @Override
     @Transactional
-    public void saveEvents(UUID aggregateId, List<DomainEvent> events) {
+    public void saveEvents(EventStreamId eventStreamId, List<DomainEvent> events) {
+        var currentVersion = new AtomicInteger(eventStreamId.version());
         var parameters = events.stream()
-                .map(e -> parameterMapper(e, aggregateId))
+                .map(e -> parameterMapper(e, eventStreamId.id(), currentVersion.incrementAndGet()))
                 .toArray(MapSqlParameterSource[]::new);
 
         try {
@@ -72,17 +74,17 @@ public class EventStoreDao implements EventStore {
                 .forEach(applicationEventPublisher::publishEvent);
     }
 
-    private MapSqlParameterSource parameterMapper(DomainEvent e, UUID aggregateId) {
+    private MapSqlParameterSource parameterMapper(DomainEvent e, UUID stream, int version) {
         var params = new MapSqlParameterSource();
         params.addValue("id", UUID.randomUUID());
-        params.addValue("stream", aggregateId);
+        params.addValue("stream", stream);
         params.addValue("type", e.getClass().getName());
         try {
             params.addValue("event", objectMapper.writeValueAsString(e));
         } catch (JsonProcessingException ex) {
             throw new RuntimeException("Error parsing event to json", ex);
         }
-        params.addValue("version", e.version());
+        params.addValue("version", version);
         params.addValue("created_at", LocalDateTime.now());
         return params;
     }
@@ -91,8 +93,10 @@ public class EventStoreDao implements EventStore {
         try {
             var result = new ArrayList<DomainEvent>();
             var version = 0;
+            var stream = "";
             while (resultSet.next()) {
                 version = resultSet.getInt("version");
+                stream = resultSet.getString("stream");
                 var type = Class.forName(resultSet.getString("type"));
                 var json = resultSet.getString("event");
                 result.add((DomainEvent) objectMapper.readValue(json, type));
@@ -100,7 +104,7 @@ public class EventStoreDao implements EventStore {
             if (result.isEmpty()) {
                 throw new AggregateNotFoundException();
             }
-            return new EventStream(version, result);
+            return new EventStream(new EventStreamId(UUID.fromString(stream), version), result);
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Not sure what to do, could not parse stored json", e);
         } catch (ClassNotFoundException e) {

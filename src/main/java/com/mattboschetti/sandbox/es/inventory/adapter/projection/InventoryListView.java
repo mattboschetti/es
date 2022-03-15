@@ -1,5 +1,6 @@
 package com.mattboschetti.sandbox.es.inventory.adapter.projection;
 
+import com.mattboschetti.sandbox.es.eventstore.DispatchableDomainEvent;
 import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
 import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemList;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
@@ -21,14 +22,14 @@ public class InventoryListView {
     }
 
     @EventListener
-    public void handle(DomainEvent event) {
-        if (event instanceof InventoryItemCreated e) {
+    public void handle(DispatchableDomainEvent event) {
+        if (event.event() instanceof InventoryItemCreated e) {
             handle(e);
         }
-        if (event instanceof InventoryItemRenamed e) {
+        if (event.event() instanceof InventoryItemRenamed e) {
             handle(e);
         }
-        if (event instanceof InventoryItemDeactivated e) {
+        if (event.event() instanceof InventoryItemDeactivated e) {
             handle(e);
         }
     }

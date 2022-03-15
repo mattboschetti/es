@@ -14,7 +14,7 @@ public abstract class AggregateRoot {
     public AggregateRoot() {}
 
     public AggregateRoot(List<DomainEvent> events, int version) {
-        events.forEach(this::applyChange);
+        events.forEach(this::apply);
         this.version = version;
     }
 
@@ -32,29 +32,9 @@ public abstract class AggregateRoot {
         return changes;
     }
 
-    public void markChangesAsCommitted() {
-        changes.clear();
-    }
-
-    public void loadsFromHistory(List<DomainEvent> history) {
-        for (DomainEvent e : history) {
-            applyChange(e, false);
-            version = e.version();
-        }
-    }
-
     protected void applyChange(DomainEvent event) {
-        applyChange(event, true);
-    }
-
-    // push atomic aggregate changes to local history for further processing (EventStore.SaveEvents)
-    private void applyChange(DomainEvent event, boolean isNew) {
-        // call each distinct apply on aggregate root
         apply(event);
-        if (isNew) {
-            // new events have no version, so we continue increasing the aggregate version and assigning that value
-            changes.add(event);
-        }
+        changes.add(event);
     }
 
     protected abstract void apply(DomainEvent event);

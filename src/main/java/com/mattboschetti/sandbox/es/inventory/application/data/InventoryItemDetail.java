@@ -28,6 +28,6 @@ public class InventoryItemDetail implements Persistable<UUID> {
 
     @Override
     public boolean isNew() {
-        return version == 1;
+        return version == 0;
     }
 }

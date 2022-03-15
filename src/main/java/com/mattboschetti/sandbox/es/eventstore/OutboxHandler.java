@@ -35,7 +35,9 @@ public class OutboxHandler {
             return;
         }
         var eventStream = eventStore.getEventsById(ids);
-        eventStream.events().forEach(applicationEventPublisher::publishEvent);
+        eventStream.events().stream()
+                .map(e -> new DispatchableDomainEvent(eventStream.id(), e))
+                .forEach(applicationEventPublisher::publishEvent);
         outboxDao.delete(ids);
     }
 }

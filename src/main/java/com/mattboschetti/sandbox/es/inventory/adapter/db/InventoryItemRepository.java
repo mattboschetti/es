@@ -3,6 +3,7 @@ package com.mattboschetti.sandbox.es.inventory.adapter.db;
 import java.util.UUID;
 
 import com.mattboschetti.sandbox.es.eventstore.EventStore;
+import com.mattboschetti.sandbox.es.eventstore.EventStreamId;
 import com.mattboschetti.sandbox.es.inventory.domain.InventoryItem;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +17,12 @@ public class InventoryItemRepository implements com.mattboschetti.sandbox.es.inv
 
     @Override
     public void save(InventoryItem aggregate) {
-        storage.saveEvents(aggregate.getId(), aggregate.getUncommittedChanges());
+        storage.saveEvents(new EventStreamId(aggregate.getId(), aggregate.getVersion()), aggregate.getUncommittedChanges());
     }
 
     @Override
     public InventoryItem getById(UUID id) {
         var eventStream = storage.getEventsForAggregate(id);
-        return new InventoryItem(eventStream.events(), eventStream.version());
+        return new InventoryItem(eventStream.events(), eventStream.id().version());
     }
 }
