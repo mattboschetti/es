@@ -5,7 +5,7 @@ import com.mattboschetti.sandbox.es.domain.Command;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class RepriceInventoryItem extends Command {
+public class RepriceInventoryItem implements Command {
     public final UUID inventoryItemId;
     public final BigDecimal unitPrice;
     public final int originalVersion;

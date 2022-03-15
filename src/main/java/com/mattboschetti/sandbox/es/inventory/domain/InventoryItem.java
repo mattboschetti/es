@@ -2,7 +2,7 @@ package com.mattboschetti.sandbox.es.inventory.domain;
 
 import com.google.common.base.Strings;
 import com.mattboschetti.sandbox.es.domain.AggregateRoot;
-import com.mattboschetti.sandbox.es.eventstore.Event;
+import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemDeactivated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemRenamed;
@@ -11,6 +11,7 @@ import com.mattboschetti.sandbox.es.inventory.event.ItemsCheckedInToInventory;
 import com.mattboschetti.sandbox.es.inventory.event.ItemsRemovedFromInventory;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public class InventoryItem extends AggregateRoot {
@@ -67,16 +68,17 @@ public class InventoryItem extends AggregateRoot {
         return id;
     }
 
-    public InventoryItem() {
-        // used to create in repository ... many ways to avoid this, eg making private constructor
+    public InventoryItem(List<DomainEvent> events, int version) {
+        super(events, version);
     }
 
     public InventoryItem(UUID id, String name, BigDecimal unitPrice) {
+        super();
         applyChange(new InventoryItemCreated(id, name, unitPrice));
     }
 
     @Override
-    protected void apply(Event event) {
+    protected void apply(DomainEvent event) {
         if (event instanceof InventoryItemCreated e) {
             apply(e);
         }

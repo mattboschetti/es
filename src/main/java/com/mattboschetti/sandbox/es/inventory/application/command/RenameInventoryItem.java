@@ -4,7 +4,7 @@ import com.mattboschetti.sandbox.es.domain.Command;
 
 import java.util.UUID;
 
-public class RenameInventoryItem extends Command {
+public class RenameInventoryItem implements Command {
     public final UUID inventoryItemId;
     public final String newName;
     public final int originalVersion;

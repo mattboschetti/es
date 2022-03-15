@@ -4,7 +4,7 @@ import com.mattboschetti.sandbox.es.domain.Command;
 
 import java.util.UUID;
 
-public class DeactivateInventoryItem extends Command {
+public class DeactivateInventoryItem implements Command {
     public final UUID inventoryItemId;
     public final int originalVersion;
 

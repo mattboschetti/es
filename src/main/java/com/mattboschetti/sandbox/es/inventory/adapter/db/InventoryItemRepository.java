@@ -21,9 +21,7 @@ public class InventoryItemRepository implements com.mattboschetti.sandbox.es.inv
 
     @Override
     public InventoryItem getById(UUID id) {
-        var obj = new InventoryItem();//lots of ways to do this
-        var e = storage.getEventsForAggregate(id);
-        obj.loadsFromHistory(e);
-        return obj;
+        var eventStream = storage.getEventsForAggregate(id);
+        return new InventoryItem(eventStream.events(), eventStream.version());
     }
 }

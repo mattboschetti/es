@@ -25,16 +25,17 @@ public class InventoryQueryService {
     }
 
     @Transactional
+    // FIXME move the rebuild methods somewhere else
     public void rebuildAll() {
         itemDetailRepository.deleteAll();
         itemListRepository.deleteAll();
-        eventStore.getAll().forEach(applicationEventPublisher::publishEvent);
+        eventStore.getAll().events().forEach(applicationEventPublisher::publishEvent);
     }
 
     @Transactional
     public void rebuildAggregate(UUID aggregateUUID) {
         itemDetailRepository.deleteById(aggregateUUID);
         itemListRepository.deleteById(aggregateUUID);
-        eventStore.getEventsForAggregate(aggregateUUID).forEach(applicationEventPublisher::publishEvent);
+        eventStore.getEventsForAggregate(aggregateUUID).events().forEach(applicationEventPublisher::publishEvent);
     }
 }

@@ -1,15 +1,20 @@
 package com.mattboschetti.sandbox.es.inventory.event;
 
-import com.mattboschetti.sandbox.es.eventstore.Event;
-
 import java.util.UUID;
 
-public class InventoryItemRenamed extends Event {
+import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
+
+public class InventoryItemRenamed implements DomainEvent {
     public final UUID id;
     public final String newName;
 
     public InventoryItemRenamed(UUID id, String newName) {
         this.id = id;
         this.newName = newName;
+    }
+
+    @Override
+    public int version() {
+        return 0;
     }
 }

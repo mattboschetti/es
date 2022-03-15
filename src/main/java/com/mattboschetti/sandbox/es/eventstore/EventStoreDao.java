@@ -36,23 +36,23 @@ public class EventStoreDao implements EventStore {
     }
 
     @Override
-    public List<Event> getAll() {
+    public EventStream getAll() {
         return namedParameterJdbcTemplate.query("select * from event_store", this::rowMapper);
     }
 
     @Override
-    public List<Event> getEventsById(List<UUID> ids) {
+    public EventStream getEventsById(List<UUID> ids) {
         return namedParameterJdbcTemplate.query("select * from event_store where id in (:ids)", Map.of("ids", ids), this::rowMapper);
     }
 
     @Override
-    public List<Event> getEventsForAggregate(UUID aggregateId) {
+    public EventStream getEventsForAggregate(UUID aggregateId) {
         return namedParameterJdbcTemplate.query("select * from event_store where stream like :stream", Map.of("stream", aggregateId.toString()), this::rowMapper);
     }
 
     @Override
     @Transactional
-    public void saveEvents(UUID aggregateId, List<Event> events) {
+    public void saveEvents(UUID aggregateId, List<DomainEvent> events) {
         var parameters = events.stream()
                 .map(e -> parameterMapper(e, aggregateId))
                 .toArray(MapSqlParameterSource[]::new);
@@ -72,7 +72,7 @@ public class EventStoreDao implements EventStore {
                 .forEach(applicationEventPublisher::publishEvent);
     }
 
-    private MapSqlParameterSource parameterMapper(Event e, UUID aggregateId) {
+    private MapSqlParameterSource parameterMapper(DomainEvent e, UUID aggregateId) {
         var params = new MapSqlParameterSource();
         params.addValue("id", UUID.randomUUID());
         params.addValue("stream", aggregateId);
@@ -82,23 +82,25 @@ public class EventStoreDao implements EventStore {
         } catch (JsonProcessingException ex) {
             throw new RuntimeException("Error parsing event to json", ex);
         }
-        params.addValue("version", e.version);
+        params.addValue("version", e.version());
         params.addValue("created_at", LocalDateTime.now());
         return params;
     }
 
-    private ArrayList<Event> rowMapper(ResultSet resultSet) {
+    private EventStream rowMapper(ResultSet resultSet) {
         try {
-            var result = new ArrayList<Event>();
+            var result = new ArrayList<DomainEvent>();
+            var version = 0;
             while (resultSet.next()) {
+                version = resultSet.getInt("version");
                 var type = Class.forName(resultSet.getString("type"));
                 var json = resultSet.getString("event");
-                result.add((Event) objectMapper.readValue(json, type));
+                result.add((DomainEvent) objectMapper.readValue(json, type));
             }
             if (result.isEmpty()) {
                 throw new AggregateNotFoundException();
             }
-            return result;
+            return new EventStream(version, result);
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Not sure what to do, could not parse stored json", e);
         } catch (ClassNotFoundException e) {

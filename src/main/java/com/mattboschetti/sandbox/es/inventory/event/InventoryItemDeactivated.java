@@ -1,11 +1,11 @@
 package com.mattboschetti.sandbox.es.inventory.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.mattboschetti.sandbox.es.eventstore.Event;
+import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
 
 import java.util.UUID;
 
-public class InventoryItemDeactivated extends Event {
+public class InventoryItemDeactivated implements DomainEvent {
     public final UUID id;
 
     // Heuristics for finding single argument constructors have some weird behavior on jackson
@@ -14,5 +14,10 @@ public class InventoryItemDeactivated extends Event {
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public InventoryItemDeactivated(UUID id) {
         this.id = id;
+    }
+
+    @Override
+    public int version() {
+        return 0;
     }
 }

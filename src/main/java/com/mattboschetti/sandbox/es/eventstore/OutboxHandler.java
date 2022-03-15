@@ -34,8 +34,8 @@ public class OutboxHandler {
             LOG.debug("Empty outbox");
             return;
         }
-        var events = eventStore.getEventsById(ids);
-        events.forEach(applicationEventPublisher::publishEvent);
+        var eventStream = eventStore.getEventsById(ids);
+        eventStream.events().forEach(applicationEventPublisher::publishEvent);
         outboxDao.delete(ids);
     }
 }

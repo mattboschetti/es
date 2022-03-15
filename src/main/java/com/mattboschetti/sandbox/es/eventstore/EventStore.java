@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EventStore {
-    void saveEvents(UUID aggregateId, List<Event> events);
+    void saveEvents(UUID aggregateId, List<DomainEvent> events);
 
-    List<Event> getEventsById(List<UUID> ids);
+    EventStream getEventsById(List<UUID> ids);
 
-    List<Event> getEventsForAggregate(UUID aggregateId);
+    EventStream getEventsForAggregate(UUID aggregateId);
 
-    List<Event> getAll();
+    EventStream getAll();
 
     class AggregateNotFoundException extends RuntimeException {}
 

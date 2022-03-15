@@ -1,6 +1,6 @@
 package com.mattboschetti.sandbox.es.inventory.adapter.projection;
 
-import com.mattboschetti.sandbox.es.eventstore.Event;
+import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
 import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemDetail;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemDeactivated;
@@ -24,7 +24,7 @@ public class InventoryItemDetailView {
     }
 
     @EventListener
-    public void handle(Event event) {
+    public void handle(DomainEvent event) {
         if (event instanceof InventoryItemCreated e) {
             handle(e);
         }
@@ -48,21 +48,21 @@ public class InventoryItemDetailView {
     public void handle(InventoryItemUnitPriceChanged message) {
         repository.findById(message.id).ifPresent(i -> {
             i.unitPrice = message.unitPrice.toString();
-            i.version = message.version;
+            i.version = message.version();
             repository.save(i);
         });
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemCreated message) {
-        repository.save(new InventoryItemDetail(message.id, message.name, 0, message.unitPrice.toString(), message.version));
+        repository.save(new InventoryItemDetail(message.id, message.name, 0, message.unitPrice.toString(), message.version()));
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemRenamed message) {
         repository.findById(message.id).ifPresent(i -> {
             i.name = message.newName;
-            i.version = message.version;
+            i.version = message.version();
             repository.save(i);
         });
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
@@ -71,7 +71,7 @@ public class InventoryItemDetailView {
     public void handle(ItemsRemovedFromInventory message) {
         repository.findById(message.id).ifPresent(item -> {
             item.currentCount -= message.count;
-            item.version = message.version;
+            item.version = message.version();
             repository.save(item);
         });
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
@@ -80,7 +80,7 @@ public class InventoryItemDetailView {
     public void handle(ItemsCheckedInToInventory message) {
         repository.findById(message.id).ifPresent(item -> {
             item.currentCount += message.count;
-            item.version = message.version;
+            item.version = message.version();
             repository.save(item);
         });
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);

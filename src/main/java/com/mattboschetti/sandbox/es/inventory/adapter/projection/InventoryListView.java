@@ -1,6 +1,6 @@
 package com.mattboschetti.sandbox.es.inventory.adapter.projection;
 
-import com.mattboschetti.sandbox.es.eventstore.Event;
+import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
 import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemList;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemDeactivated;
@@ -21,7 +21,7 @@ public class InventoryListView {
     }
 
     @EventListener
-    public void handle(Event event) {
+    public void handle(DomainEvent event) {
         if (event instanceof InventoryItemCreated e) {
             handle(e);
         }
@@ -34,14 +34,14 @@ public class InventoryListView {
     }
 
     public void handle(InventoryItemCreated message) {
-        repository.save(new InventoryItemList(message.id, message.name, message.version));
+        repository.save(new InventoryItemList(message.id, message.name, message.version()));
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);
     }
 
     public void handle(InventoryItemRenamed message) {
         repository.findById(message.id).ifPresent(item -> {
             item.name = message.newName;
-            item.version = message.version;
+            item.version = message.version();
             repository.save(item);
         });
         LOG.debug("Handled {} id {}", message.getClass().getSimpleName(), message.id);

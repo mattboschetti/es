@@ -4,7 +4,7 @@ import com.mattboschetti.sandbox.es.domain.Command;
 
 import java.util.UUID;
 
-public class CheckInItemsToInventory extends Command {
+public class CheckInItemsToInventory implements Command {
     public final UUID inventoryItemId;
     public final int count;
     public final int originalVersion;
