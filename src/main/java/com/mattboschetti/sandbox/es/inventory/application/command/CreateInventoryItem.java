@@ -1,17 +1,14 @@
 package com.mattboschetti.sandbox.es.inventory.application.command;
 
+import java.math.BigDecimal;
+
 import com.mattboschetti.sandbox.es.domain.Command;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
 public class CreateInventoryItem implements Command {
-    public final UUID inventoryItemId;
     public final String name;
     public final BigDecimal unitPrice;
 
-    public CreateInventoryItem(UUID inventoryItemId, String name, BigDecimal unitPrice) {
-        this.inventoryItemId = inventoryItemId;
+    public CreateInventoryItem(String name, BigDecimal unitPrice) {
         this.name = name;
         this.unitPrice = unitPrice;
     }

@@ -45,7 +45,7 @@ public class InventoryController {
     @Operation(summary = "Add a new item to the inventory")
     @PostMapping
     public void newInventoryItem(@RequestParam("name") String name, @RequestParam String unitPrice) {
-        inventoryCommandHandler.handle(new CreateInventoryItem(UUID.randomUUID(), name, new BigDecimal(unitPrice)));
+        inventoryCommandHandler.handle(new CreateInventoryItem(name, new BigDecimal(unitPrice)));
     }
 
     @Operation(summary = "Remove item from inventory")

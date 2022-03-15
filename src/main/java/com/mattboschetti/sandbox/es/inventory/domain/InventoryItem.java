@@ -18,13 +18,18 @@ public class InventoryItem extends AggregateRoot {
     private boolean activated;
     private UUID id;
 
-    private void apply(InventoryItemCreated e) {
-        id = e.id;
-        activated = true;
+    public InventoryItem(List<DomainEvent> events, int version) {
+        super(events, version);
     }
 
-    private void apply(InventoryItemDeactivated e) {
-        activated = false;
+    public InventoryItem(UUID id, String name, BigDecimal unitPrice) {
+        super();
+        applyChange(new InventoryItemCreated(id, name, unitPrice));
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 
     public void changeName(String newName) {
@@ -63,27 +68,12 @@ public class InventoryItem extends AggregateRoot {
         applyChange(new InventoryItemUnitPriceChanged(id, unitPrice));
     }
 
-    @Override
-    public UUID getId() {
-        return id;
+    private void apply(InventoryItemCreated e) {
+        id = e.id;
+        activated = true;
     }
 
-    public InventoryItem(List<DomainEvent> events, int version) {
-        super(events, version);
-    }
-
-    public InventoryItem(UUID id, String name, BigDecimal unitPrice) {
-        super();
-        applyChange(new InventoryItemCreated(id, name, unitPrice));
-    }
-
-    @Override
-    protected void apply(DomainEvent event) {
-        if (event instanceof InventoryItemCreated e) {
-            apply(e);
-        }
-        if (event instanceof InventoryItemDeactivated e) {
-            apply(e);
-        }
+    private void apply(InventoryItemDeactivated e) {
+        activated = false;
     }
 }

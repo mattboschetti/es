@@ -1,5 +1,7 @@
 package com.mattboschetti.sandbox.es.inventory.application;
 
+import java.util.UUID;
+
 import com.mattboschetti.sandbox.es.inventory.application.command.*;
 import com.mattboschetti.sandbox.es.inventory.domain.InventoryItem;
 import com.mattboschetti.sandbox.es.inventory.domain.InventoryItemRepository;
@@ -15,7 +17,7 @@ public class InventoryApplicationService {
     }
 
     public void handle(CreateInventoryItem message) {
-        var item = new InventoryItem(message.inventoryItemId, message.name, message.unitPrice);
+        var item = new InventoryItem(UUID.randomUUID(), message.name, message.unitPrice);
         repository.save(item);
     }
 
