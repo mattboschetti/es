@@ -1,0 +1,17 @@
+<turbo-frame id="inventory" xmlns:th="http://www.thymeleaf.org">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.id}">c73fb9c9-d914-45ec-819e-9f696674c26c</td>
+            <td th:text="${item.name}">Item name</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</turbo-frame>

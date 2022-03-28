@@ -13,6 +13,7 @@ import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemList
 import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemListRepository;
 import com.mattboschetti.sandbox.es.inventory.application.InventoryQueryService;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/inventory/item")
+@RequestMapping(value = "/inventory/item", produces = MediaType.APPLICATION_JSON_VALUE)
 public class InventoryController {
 
     private final InventoryApplicationService inventoryCommandHandler;
