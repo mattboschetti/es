@@ -2,7 +2,7 @@ package com.mattboschetti.sandbox.es.inventory.event;
 
 import java.util.UUID;
 
-import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
+import com.mattboschetti.sandbox.es.common.eventstore.DomainEvent;
 
 public class InventoryItemRenamed implements DomainEvent {
     public final UUID id;

@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.eventstore;
+package com.mattboschetti.sandbox.es.common.eventstore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

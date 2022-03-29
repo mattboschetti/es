@@ -1,6 +1,6 @@
-package com.mattboschetti.sandbox.es.api;
+package com.mattboschetti.sandbox.es.common.api;
 
-import com.mattboschetti.sandbox.es.eventstore.EventStore;
+import com.mattboschetti.sandbox.es.common.eventstore.EventStore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

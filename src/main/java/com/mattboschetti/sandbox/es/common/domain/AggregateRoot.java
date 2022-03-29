@@ -1,11 +1,11 @@
-package com.mattboschetti.sandbox.es.domain;
+package com.mattboschetti.sandbox.es.common.domain;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
 import com.mattboschetti.sandbox.es.ESException;
-import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
+import com.mattboschetti.sandbox.es.common.eventstore.DomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

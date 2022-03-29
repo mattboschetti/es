@@ -1,6 +1,6 @@
 package com.mattboschetti.sandbox.es.inventory.event;
 
-import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
+import com.mattboschetti.sandbox.es.common.eventstore.DomainEvent;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -1,7 +1,7 @@
 package com.mattboschetti.sandbox.es.inventory.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
+import com.mattboschetti.sandbox.es.common.eventstore.DomainEvent;
 
 import java.util.UUID;
 

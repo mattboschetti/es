@@ -1,8 +1,7 @@
 package com.mattboschetti.sandbox.es.inventory.adapter.projection;
 
-import com.mattboschetti.sandbox.es.eventstore.DispatchableDomainEvent;
-import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
-import com.mattboschetti.sandbox.es.eventstore.EventStreamId;
+import com.mattboschetti.sandbox.es.common.eventstore.DispatchableDomainEvent;
+import com.mattboschetti.sandbox.es.common.eventstore.EventStreamId;
 import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemDetail;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemDeactivated;

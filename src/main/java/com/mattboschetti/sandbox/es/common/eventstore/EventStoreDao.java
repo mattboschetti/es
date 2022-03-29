@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.eventstore;
+package com.mattboschetti.sandbox.es.common.eventstore;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

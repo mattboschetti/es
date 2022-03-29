@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.eventstore;
+package com.mattboschetti.sandbox.es.common.eventstore;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.eventstore;
+package com.mattboschetti.sandbox.es.common.eventstore;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;

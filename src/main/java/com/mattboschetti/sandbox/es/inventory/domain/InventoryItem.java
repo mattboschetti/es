@@ -1,8 +1,8 @@
 package com.mattboschetti.sandbox.es.inventory.domain;
 
 import com.google.common.base.Strings;
-import com.mattboschetti.sandbox.es.domain.AggregateRoot;
-import com.mattboschetti.sandbox.es.eventstore.DomainEvent;
+import com.mattboschetti.sandbox.es.common.domain.AggregateRoot;
+import com.mattboschetti.sandbox.es.common.eventstore.DomainEvent;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemCreated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemDeactivated;
 import com.mattboschetti.sandbox.es.inventory.event.InventoryItemRenamed;

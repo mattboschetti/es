@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.eventstore;
+package com.mattboschetti.sandbox.es.common.eventstore;
 
 public record DispatchableDomainEvent(EventStreamId eventStreamId, DomainEvent event) {
 }

@@ -1,4 +1,4 @@
-package com.mattboschetti.sandbox.es.domain;
+package com.mattboschetti.sandbox.es.common.domain;
 
 import java.util.UUID;
 

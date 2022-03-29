@@ -1,6 +1,6 @@
 package com.mattboschetti.sandbox.es.inventory.application.command;
 
-import com.mattboschetti.sandbox.es.domain.Command;
+import com.mattboschetti.sandbox.es.common.domain.Command;
 
 import java.util.UUID;
 

@@ -1,6 +1,6 @@
 package com.mattboschetti.sandbox.es.inventory.application;
 
-import com.mattboschetti.sandbox.es.eventstore.EventStore;
+import com.mattboschetti.sandbox.es.common.eventstore.EventStore;
 import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemDetailRepository;
 import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemListRepository;
 import org.springframework.context.ApplicationEventPublisher;

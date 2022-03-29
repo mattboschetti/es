@@ -2,8 +2,8 @@ package com.mattboschetti.sandbox.es.inventory.adapter.db;
 
 import java.util.UUID;
 
-import com.mattboschetti.sandbox.es.eventstore.EventStore;
-import com.mattboschetti.sandbox.es.eventstore.EventStreamId;
+import com.mattboschetti.sandbox.es.common.eventstore.EventStore;
+import com.mattboschetti.sandbox.es.common.eventstore.EventStreamId;
 import com.mattboschetti.sandbox.es.inventory.domain.InventoryItem;
 import org.springframework.stereotype.Component;
 
