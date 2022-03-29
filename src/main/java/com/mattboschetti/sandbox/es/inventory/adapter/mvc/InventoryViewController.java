@@ -1,6 +1,6 @@
 package com.mattboschetti.sandbox.es.inventory.adapter.mvc;
 
-import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemListRepository;
+import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemViewRepository;
 import com.mattboschetti.sandbox.es.inventory.application.InventoryQueryService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InventoryViewController {
 
     private final InventoryQueryService inventoryQueryService;
-    private final InventoryItemListRepository itemListRepository;
+    private final InventoryItemViewRepository itemListRepository;
 
     public InventoryViewController(InventoryQueryService inventoryQueryService,
-                                   InventoryItemListRepository itemListRepository) {
+                                   InventoryItemViewRepository itemListRepository) {
         this.inventoryQueryService = inventoryQueryService;
         this.itemListRepository = itemListRepository;
     }

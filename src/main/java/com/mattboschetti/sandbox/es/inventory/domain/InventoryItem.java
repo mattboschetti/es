@@ -11,6 +11,7 @@ import com.mattboschetti.sandbox.es.inventory.event.ItemsCheckedInToInventory;
 import com.mattboschetti.sandbox.es.inventory.event.ItemsRemovedFromInventory;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +23,9 @@ public class InventoryItem extends AggregateRoot {
         super(events, version);
     }
 
-    public InventoryItem(UUID id, String name, BigDecimal unitPrice) {
+    public InventoryItem(UUID id, String name, String category, BigDecimal unitPrice, LocalDateTime createdAt) {
         super();
-        applyChange(new InventoryItemCreated(id, name, unitPrice));
+        applyChange(new InventoryItemCreated(id, name, category, unitPrice, createdAt));
     }
 
     @Override

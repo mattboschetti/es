@@ -1,28 +1,16 @@
-create table inventory_item_detail
+create table inventory_item
 (
     id uuid not null,
     name varchar not null,
-    current_count bigint not null,
+    category varchar not null,
+    unit_price text not null,
+    quantity bigint not null,
     version int not null
 );
 
-create unique index inventory_item_detail_id_uindex
-    on inventory_item_detail (id);
+create unique index inventory_item_id_uindex
+    on inventory_item (id);
 
-alter table inventory_item_detail
-    add constraint inventory_item_detail_pk
+alter table inventory_item
+    add constraint inventory_item_pk
         primary key (id);
-
-create table inventory_item_list
-(
-    id uuid not null,
-    name varchar not null
-);
-
-create unique index inventory_item_list_id_uindex
-    on inventory_item_list (id);
-
-alter table inventory_item_list
-    add constraint inventory_item_list_pk
-        primary key (id);
-

@@ -1,4 +1,4 @@
-create table sourced_events
+create table event_store
 (
     id uuid not null,
     stream varchar not null,
@@ -8,13 +8,13 @@ create table sourced_events
     created_at timestamp not null
 );
 
-create unique index sourced_events_id_uindex
-    on sourced_events (id);
+create unique index event_store_id_uindex
+    on event_store (id);
 
-create unique index sourced_events_stream_version_uindex
-    on sourced_events (stream, version);
+create unique index event_store_stream_version_uindex
+    on event_store (stream, version);
 
-alter table sourced_events
-    add constraint sourced_events_pk
+alter table event_store
+    add constraint event_store_pk
         primary key (id);
 

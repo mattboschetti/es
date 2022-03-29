@@ -1,30 +1,14 @@
 package com.mattboschetti.sandbox.es.inventory.adapter.rest;
 
+import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemViewRepository;
 import com.mattboschetti.sandbox.es.inventory.application.InventoryApplicationService;
-import com.mattboschetti.sandbox.es.inventory.application.command.CheckInItemsToInventory;
-import com.mattboschetti.sandbox.es.inventory.application.command.CreateInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.application.command.DeactivateInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.application.command.RemoveItemsFromInventory;
-import com.mattboschetti.sandbox.es.inventory.application.command.RenameInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.application.command.RepriceInventoryItem;
-import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemDetail;
-import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemDetailRepository;
-import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItemList;
-import com.mattboschetti.sandbox.es.inventory.adapter.projection.InventoryItemListRepository;
 import com.mattboschetti.sandbox.es.inventory.application.InventoryQueryService;
+import com.mattboschetti.sandbox.es.inventory.application.command.*;
+import com.mattboschetti.sandbox.es.inventory.application.data.InventoryItem;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
@@ -32,21 +16,19 @@ import java.util.UUID;
 public class InventoryController {
 
     private final InventoryApplicationService inventoryCommandHandler;
-    private final InventoryItemListRepository itemListRepository;
-    private final InventoryItemDetailRepository itemDetailRepository;
+    private final InventoryItemViewRepository itemListRepository;
     private final InventoryQueryService readModelService;
 
-    public InventoryController(InventoryApplicationService inventoryCommandHandler, InventoryItemListRepository itemListRepository, InventoryItemDetailRepository itemDetailRepository, InventoryQueryService readModelService) {
+    public InventoryController(InventoryApplicationService inventoryCommandHandler, InventoryItemViewRepository itemListRepository, InventoryQueryService readModelService) {
         this.inventoryCommandHandler = inventoryCommandHandler;
         this.itemListRepository = itemListRepository;
-        this.itemDetailRepository = itemDetailRepository;
         this.readModelService = readModelService;
     }
 
     @Operation(summary = "Add a new item to the inventory")
     @PostMapping
-    public void newInventoryItem(@RequestParam("name") String name, @RequestParam String unitPrice) {
-        inventoryCommandHandler.handle(new CreateInventoryItem(name, new BigDecimal(unitPrice)));
+    public void newInventoryItem(@RequestBody CreateInventoryItem createInventoryItem) {
+        inventoryCommandHandler.handle(createInventoryItem);
     }
 
     @Operation(summary = "Remove item from inventory")
@@ -56,40 +38,35 @@ public class InventoryController {
     }
 
     @Operation(summary = "Reduces the amount of an item in the inventory")
-    @PostMapping("/{uuid}/remove")
-    public void removeItemsFromInventory(@PathVariable("uuid") UUID uuid, @RequestParam("count") int count, @RequestParam("version") int version) {
-        inventoryCommandHandler.handle(new RemoveItemsFromInventory(uuid, count, version));
+    @PutMapping("/{uuid}/remove")
+    public void removeItemsFromInventory(@PathVariable("uuid") UUID uuid, @RequestBody RemoveItemsFromInventory removeItemsFromInventory) {
+        inventoryCommandHandler.handle(removeItemsFromInventory);
     }
 
     @Operation(summary = "Increases the amount of an item in the inventory")
-    @PostMapping("/{uuid}/checkin")
-    public void checkinItemsToInventory(@PathVariable("uuid") UUID uuid, @RequestParam("count") int count, @RequestParam("version") int version) {
-        inventoryCommandHandler.handle(new CheckInItemsToInventory(uuid, count, version));
+    @PutMapping("/{uuid}/checkin")
+    public void checkinItemsToInventory(@PathVariable("uuid") UUID uuid, @RequestBody CheckInItemsToInventory checkInItemsToInventory) {
+        inventoryCommandHandler.handle(checkInItemsToInventory);
     }
 
     @Operation(summary = "Rename an item")
     @PutMapping("/{uuid}/name")
-    public void renameItem(@PathVariable("uuid") UUID uuid, @RequestParam("name") String name, @RequestParam("version") int version) {
-        inventoryCommandHandler.handle(new RenameInventoryItem(uuid, name, version));
+    public void renameItem(@PathVariable("uuid") UUID uuid, @RequestBody RenameInventoryItem renameInventoryItem) {
+        inventoryCommandHandler.handle(renameInventoryItem);
     }
 
     @Operation(summary = "Reprice an item")
     @PutMapping("/{uuid}/price")
-    public void repriceItem(@PathVariable("uuid") UUID uuid, @RequestParam("price") String price, @RequestParam("version") int version) {
-        inventoryCommandHandler.handle(new RepriceInventoryItem(uuid, new BigDecimal(price), version));
+    public void repriceItem(@PathVariable("uuid") UUID uuid, @RequestBody RepriceInventoryItem repriceInventoryItem) {
+        inventoryCommandHandler.handle(repriceInventoryItem);
     }
 
     @Operation(summary = "Get all inventory items")
     @GetMapping
-    public Iterable<InventoryItemList> getItems() {
+    public Iterable<InventoryItem> getItems() {
         return itemListRepository.findAll();
     }
 
-    @Operation(summary = "Get inventory item by id")
-    @GetMapping("/{uuid}")
-    public ResponseEntity<InventoryItemDetail> getItem(@PathVariable("uuid") UUID uuid) {
-        return itemDetailRepository.findById(uuid).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
 
     @Operation(summary = "Rebuild all aggregates")
     @PostMapping("/rebuild")

@@ -1,5 +1,7 @@
 package com.mattboschetti.sandbox.es.inventory.application;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.mattboschetti.sandbox.es.inventory.application.command.*;
@@ -11,13 +13,15 @@ import org.springframework.stereotype.Service;
 public class InventoryApplicationService {
 
     private final InventoryItemRepository repository;
+    private final Clock clock;
 
-    public InventoryApplicationService(InventoryItemRepository repository) {
+    public InventoryApplicationService(InventoryItemRepository repository, Clock clock) {
         this.repository = repository;
+        this.clock = clock;
     }
 
     public void handle(CreateInventoryItem message) {
-        var item = new InventoryItem(UUID.randomUUID(), message.name, message.unitPrice);
+        var item = new InventoryItem(UUID.randomUUID(), message.name, message.category, message.unitPrice, LocalDateTime.now(clock));
         repository.save(item);
     }
 
