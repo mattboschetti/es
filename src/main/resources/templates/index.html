@@ -2,16 +2,70 @@
 <html lang="en">
 <head>
     <title>Event Sourcing in Java using Spring and PostgreSQL</title>
-    <link type="text/css" rel="stylesheet" href="resources/styles.css">
+    <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-3.1.1.min.css"/>
     <script type="module">
-        import turbo from 'https://cdn.skypack.dev/pin/@hotwired/turbo@v7.1.0-V83RMQBlYCPK9CvTqQoL/mode=imports/optimized/@hotwired/turbo.js';
+        import turbo
+            from 'https://cdn.skypack.dev/pin/@hotwired/turbo@v7.1.0-V83RMQBlYCPK9CvTqQoL/mode=imports/optimized/@hotwired/turbo.js';
     </script>
 </head>
 <body>
-<h1>Welcome</h1>
-<p>This is an event sourcing example application using Java, Spring and PostgreSQL.</p>
-<turbo-frame id="inventory" src="/inventory">
-    <p>Inventory</p>
-</turbo-frame>
+<header id="navigation" class="p-navigation is-dark">
+    <div class="p-navigation__row row">
+        <nav class="p-navigation__nav" aria-label="Example main navigation">
+            <ul id="main-navigation" class="p-navigation__items u-clearfix">
+                <li class="p-navigation__item is-selected"><a class="p-navigation__link" href="#install">Inventory</a></li>
+                <li class="p-navigation__item"><a class="p-navigation__link" href="#how-it-works">Orders</a></li>
+                <li class="p-navigation__item"><a class="p-navigation__link" href="#tour">Customers</a></li>
+                <li class="p-navigation__item" aria-current="page"><a class="p-navigation__link" href="#docs">About</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="p-strip is-shallow">
+    <div class="row">
+        <aside class="col-3">
+            <nav class="p-side-navigation" id="drawer" aria-label="Example side navigation">
+                <div class="p-side-navigation__drawer">
+                    <ul class="p-side-navigation__list">
+                        <li class="p-side-navigation__item--title">
+                            <a class="p-side-navigation__link">Inventory</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="#">Add item</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="#">All items</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="#">Statistics</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="#">History</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="col-9" id="main-content">
+            <h1>All items</h1>
+
+            <div class="md-table">
+                <turbo-frame id="inventory" src="/inventory">
+                    <p>Inventory</p>
+                </turbo-frame>
+            </div>
+        </main>
+    </div>
+</div>
+
+<footer class="p-strip">
+    <nav class="row" aria-label="Footer navigation">
+        <div class="has-cookie">
+            <p>© 1987 Matheus Boschetti</p>
+            <span class="u-off-screen"><a href="#">Go to the top of the page</a></span>
+        </div>
+    </nav>
+</footer>
 </body>
 </html>
