@@ -4,13 +4,18 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Category</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="item : ${items}">
             <td th:text="${item.id}">c73fb9c9-d914-45ec-819e-9f696674c26c</td>
-            <td th:text="${item.name}">Item name</td>
-            <td></td>
+            <td th:text="${item.name}">Name</td>
+            <td th:text="${item.category}">Category</td>
+            <td th:text="${item.unitPrice}">Unit price</td>
+            <td th:text="${item.quantity}">Quantity</td>
         </tr>
         </tbody>
     </table>
