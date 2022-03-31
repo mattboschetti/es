@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{inventory}">
+<head>
+    <title>Inventory add</title>
+    <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-3.1.1.min.css"/>
+    <script type="module">
+        import turbo
+            from 'https://cdn.skypack.dev/pin/@hotwired/turbo@v7.1.0-V83RMQBlYCPK9CvTqQoL/mode=imports/optimized/@hotwired/turbo.js';
+    </script>
+</head>
+<body>
+<div class="p-strip is-shallow">
+    <div class="row">
+        <aside th:replace="inventory :: side-navigation"></aside>
+        <main class="col-9" layout:fragment="inventory-content">
+            <turbo-frame id="inventory">
+                <h1>Add item</h1>
+
+                <form>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Product name">
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" placeholder="Product category">
+                    <label for="unitPrice">Unit price</label>
+                    <input type="text" id="unitPrice" name="unitPrice">
+                    <label for="quantity">Quantity</label>
+                    <input type="text" id="quantity" name="quantity">
+                    <button type="submit" name="submit">Add</button>
+                </form>
+            </turbo-frame>
+        </main>
+    </div>
+</div>
+</body>
+</html>

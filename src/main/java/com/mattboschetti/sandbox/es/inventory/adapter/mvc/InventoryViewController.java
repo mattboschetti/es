@@ -21,13 +21,23 @@ public class InventoryViewController {
         this.itemListRepository = itemListRepository;
     }
 
+
     @GetMapping
+    public String index(ModelMap model) {
+        var items = itemListRepository.findAll();
+        model.put("items", items);
+        return "inventory";
+    }
+
+    @GetMapping("/list")
     public String list(ModelMap model) {
         var items = itemListRepository.findAll();
         model.put("items", items);
         return "inventory/list";
     }
 
-
-
+    @GetMapping("/add")
+    public String add() {
+        return "inventory/add";
+    }
 }

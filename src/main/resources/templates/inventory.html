@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Inventory</title>
+    <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-3.1.1.min.css"/>
+    <script type="module">
+        import turbo
+            from 'https://cdn.skypack.dev/pin/@hotwired/turbo@v7.1.0-V83RMQBlYCPK9CvTqQoL/mode=imports/optimized/@hotwired/turbo.js';
+    </script>
+</head>
+<body>
+<div class="p-strip is-shallow">
+    <div class="row" layout:fragment="main-content">
+        <aside id="side-navigation" class="col-3">
+            <nav class="p-side-navigation" id="drawer" aria-label="Side navigation">
+                <div class="p-side-navigation__drawer">
+                    <ul class="p-side-navigation__list">
+                        <li class="p-side-navigation__item--title">
+                            <a class="p-side-navigation__link">Inventory</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="/inventory/add">Add item</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="/inventory/list">All items</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="/inventory/statistics">Statistics</a>
+                        </li>
+                        <li class="p-side-navigation__item">
+                            <a class="p-side-navigation__link" href="/inventory/history">History</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="col-9" id="content" layout:fragment="inventory-content">
+            <turbo-frame id="inventory">
+                <h1>Inventory</h1>
+            </turbo-frame>
+        </main>
+    </div>
+</div>
+</body>
+</html>

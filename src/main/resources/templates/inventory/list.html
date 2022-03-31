@@ -1,22 +1,46 @@
-<turbo-frame id="inventory" xmlns:th="http://www.thymeleaf.org">
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Unit Price</th>
-            <th>Quantity</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${items}">
-            <td th:text="${item.id}">c73fb9c9-d914-45ec-819e-9f696674c26c</td>
-            <td th:text="${item.name}">Name</td>
-            <td th:text="${item.category}">Category</td>
-            <td th:text="${item.unitPrice}">Unit price</td>
-            <td th:text="${item.quantity}">Quantity</td>
-        </tr>
-        </tbody>
-    </table>
-</turbo-frame>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{inventory}">
+<head>
+    <title>Inventory list</title>
+    <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-3.1.1.min.css"/>
+    <script type="module">
+        import turbo
+            from 'https://cdn.skypack.dev/pin/@hotwired/turbo@v7.1.0-V83RMQBlYCPK9CvTqQoL/mode=imports/optimized/@hotwired/turbo.js';
+    </script>
+</head>
+<body>
+<div class="p-strip is-shallow">
+    <div class="row">
+        <aside th:replace=":: side-navigation"></aside>
+        <main class="col-9" layout:fragment="inventory-content">
+            <turbo-frame id="inventory" xmlns:th="http://www.thymeleaf.org">
+                <h1>All items</h1>
+
+                <div class="md-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${items}">
+                            <td th:text="${item.id}">c73fb9c9-d914-45ec-819e-9f696674c26c</td>
+                            <td th:text="${item.name}">Name</td>
+                            <td th:text="${item.category}">Category</td>
+                            <td th:text="${item.unitPrice}">Unit price</td>
+                            <td th:text="${item.quantity}">Quantity</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </turbo-frame>
+        </main>
+    </div>
+</div>
+</body>
+</html>

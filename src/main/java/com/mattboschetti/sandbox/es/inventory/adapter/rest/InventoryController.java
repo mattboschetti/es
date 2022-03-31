@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/inventory/item", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/inventory/item", produces = MediaType.APPLICATION_JSON_VALUE)
 public class InventoryController {
 
     private final InventoryApplicationService inventoryCommandHandler;
